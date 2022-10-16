@@ -15,6 +15,7 @@ int main(void) try {
 		 0.0f,  1.0f, 0.0f,
 	};
 	triangle.program = Ngine::Gfx::CompileShader("Shader/DebugV.glsl", "Shader/DebugF.glsl");
+	triangle.InitMatrix();
 
 	while (!wnd.ShouldClose())
 	{

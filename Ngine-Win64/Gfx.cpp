@@ -2,6 +2,8 @@
 #include "Gfx.h"
 #include <fstream>
 #include <spdlog/spdlog.h>
+#include <glm/matrix.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 GLuint Ngine::Gfx::CompileShader(const char* vertex_file_path, const char* fragment_file_path)
 {
@@ -108,6 +110,8 @@ void Ngine::Object::Draw()
 	//Enable associated program
 	glUseProgram(program);
 
+	glUniformMatrix4fv(mat.matrixID, 1, GL_FALSE, &mat.MVP[0][0]);
+
 	//Generate VAO
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
@@ -127,4 +131,25 @@ void Ngine::Object::Draw()
 	//Delete buffers
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
+}
+
+void Ngine::Object::InitMatrix()
+{
+	mat.Initialize(program);
+}
+
+void Ngine::Matrix::Initialize(GLuint program)
+{
+	matrixID = glGetUniformLocation(program, "MVP");
+
+	//45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+
+	//Camera matrix
+	glm::mat4 View = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
+	//Model matrix
+	glm::mat4 Model = glm::mat4(1.0f);
+
+	MVP = Projection * View * Model;
 }
