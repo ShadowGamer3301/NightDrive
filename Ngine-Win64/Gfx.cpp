@@ -55,7 +55,7 @@ GLuint Ngine::Gfx::CompileShader(const char* vertex_file_path, const char* fragm
 	if (InfoLogLength > 0) {
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-		spdlog::error("%s\n", &VertexShaderErrorMessage[0]);
+		spdlog::error("{}", &VertexShaderErrorMessage[0]);
 	}
 
 
@@ -72,7 +72,7 @@ GLuint Ngine::Gfx::CompileShader(const char* vertex_file_path, const char* fragm
 	if (InfoLogLength > 0) {
 		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-		spdlog::error("%s\n", &FragmentShaderErrorMessage[0]);
+		spdlog::error("{}", &FragmentShaderErrorMessage[0]);
 	}
 
 
@@ -90,7 +90,7 @@ GLuint Ngine::Gfx::CompileShader(const char* vertex_file_path, const char* fragm
 	if (InfoLogLength > 0) {
 		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-		spdlog::error("%s\n", &ProgramErrorMessage[0]);
+		spdlog::error("{}", &ProgramErrorMessage[0]);
 	}
 
 
