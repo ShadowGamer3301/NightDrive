@@ -8,33 +8,17 @@ int main(void) try {
 
 	Ngine::Window wnd(std::stoi(ini["Game"]["Width"]), std::stoi(ini["Game"]["Height"]), "NightDrive test build");
 
-	Ngine::Object cube;
-	cube.verticies = {
-		-2.0f, -2.0f, 0.0f,
-	   2.0f, -2.0f, 0.0f,
-	   -2.0f,  2.0f, 0.0f,
-	   2.0f, 2.0f, 0.0f,
-	   2.0f, -2.0f, 0.0f,
-	   -2.0f,  2.0f, 0.0f,
-	};
+	Ngine::Object obj;
+	
 
-	cube.uvs = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		0.0f, 1.0f
-	};
-
-	cube.program = Ngine::Gfx::CompileShader("Shader/TTV.glsl", "Shader/TTF.glsl");
-	cube.texture = Ngine::Gfx::LoadBMP("road.bmp");
-	cube.InitMatrix();
+	obj.program = Ngine::Gfx::CompileShader("Shader/TDV.glsl", "Shader/TDF.glsl");
+	Ngine::Gfx::LoadOBJ("Trunk1.obj", obj.verticies, obj.uvs, obj.normals, false);
+	obj.InitMatrix();
 
 	while (!wnd.ShouldClose())
 	{
 		wnd.StartRender();
-		cube.Draw();
+		obj.Draw();
 		wnd.EndRender();
 	}
 

@@ -282,9 +282,104 @@ GLuint Ngine::Gfx::LoadDDS(const char* ipath)
 	return textureID;
 }
 
+void Ngine::Gfx::LoadOBJ(const char* opath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals, bool dds)
+{
+	spdlog::info("Loading mesh in OBJ format: {}", opath);
+
+	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+	std::vector<glm::vec3> temp_vertices;
+	std::vector<glm::vec2> temp_uvs;
+	std::vector<glm::vec3> temp_normals;
+
+	FILE* file = fopen(opath, "r");
+	if (file == NULL) {
+		spdlog::error("Could not open {}", opath);
+		throw Ngine::Exception(__LINE__, __FILE__, "Could not open mesh file");
+	}
+
+	while (1) {
+
+		char lineHeader[128];
+		// read the first word of the line
+		int res = fscanf(file, "%s", lineHeader);
+		if (res == EOF)
+			break; // EOF = End Of File. Quit the loop.
+
+		// else : parse lineHeader
+
+		if (strcmp(lineHeader, "v") == 0) {
+			glm::vec3 vertex;
+			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			temp_vertices.push_back(vertex);
+		}
+		else if (strcmp(lineHeader, "vt") == 0) {
+			glm::vec2 uv;
+			fscanf(file, "%f %f\n", &uv.x, &uv.y);
+			if(dds)
+				uv.y = -uv.y; // Invert V coordinate since we will only use DDS texture, which are inverted. Remove if you want to use TGA or BMP loaders.
+			temp_uvs.push_back(uv);
+		}
+		else if (strcmp(lineHeader, "vn") == 0) {
+			glm::vec3 normal;
+			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			temp_normals.push_back(normal);
+		}
+		else if (strcmp(lineHeader, "f") == 0) {
+			std::string vertex1, vertex2, vertex3;
+			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+			if (matches != 9) {
+				spdlog::info("File can't be read by our simple parser");
+				throw Ngine::Exception(__LINE__, __FILE__, "Could not prase mesh file");
+				fclose(file);
+			}
+			vertexIndices.push_back(vertexIndex[0]);
+			vertexIndices.push_back(vertexIndex[1]);
+			vertexIndices.push_back(vertexIndex[2]);
+			uvIndices.push_back(uvIndex[0]);
+			uvIndices.push_back(uvIndex[1]);
+			uvIndices.push_back(uvIndex[2]);
+			normalIndices.push_back(normalIndex[0]);
+			normalIndices.push_back(normalIndex[1]);
+			normalIndices.push_back(normalIndex[2]);
+		}
+		else {
+			// Probably a comment, eat up the rest of the line
+			char stupidBuffer[1000];
+			fgets(stupidBuffer, 1000, file);
+		}
+	}
+
+	// For each vertex of each triangle
+	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+
+		// Get the indices of its attributes
+		unsigned int vertexIndex = vertexIndices[i];
+		unsigned int uvIndex = uvIndices[i];
+		unsigned int normalIndex = normalIndices[i];
+
+		// Get the attributes thanks to the index
+		// Put the attributes in buffers
+
+		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+		verticies.push_back(vertex);
+
+		if (temp_uvs.size() > 0) {
+			glm::vec2 uv = temp_uvs[uvIndex - 1];
+			uvs.push_back(uv);
+		}
+
+		if (temp_normals.size() > 0) {
+			glm::vec3 normal = temp_normals[normalIndex - 1];
+			normals.push_back(normal);
+		}
+
+	}
+	fclose(file);
+}
+
 void Ngine::Object::Draw()
 {
-	float* vert = verticies.data();
 
 	//Enable associated program
 	glUseProgram(program);
@@ -298,20 +393,20 @@ void Ngine::Object::Draw()
 	//Generate VBO
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * verticies.size(), verticies.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * verticies.size(), verticies.data(), GL_STATIC_DRAW);
 	
 	//Generate CBO
 	if (!color.empty()) {
 		glGenBuffers(1, &CBO);
 		glBindBuffer(GL_ARRAY_BUFFER, CBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * color.size(), color.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * color.size(), color.data(), GL_STATIC_DRAW);
 	}
 
 	//Generate UBO
 	if (!uvs.empty()) {
 		glGenBuffers(1, &UBO);
 		glBindBuffer(GL_ARRAY_BUFFER, UBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * uvs.size(), uvs.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * uvs.size(), uvs.data(), GL_STATIC_DRAW);
 	}
 
 	//Draw object
@@ -354,8 +449,13 @@ void Ngine::Matrix::Initialize(GLuint program)
 {
 	matrixID = glGetUniformLocation(program, "MVP");
 
-	//45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	mINI::INIFile file("Game.ini");
+	mINI::INIStructure ini;
+	if (!file.read(ini))
+		throw Ngine::Exception(__LINE__, __FILE__, "Could not read configuration file");
+
+	//45° Field of View, dynamic ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)std::stoi(ini["Game"]["Width"]) / (float)std::stoi(ini["Game"]["Height"]), 0.1f, 100.0f);
 
 	//Camera matrix
 	glm::mat4 View = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));

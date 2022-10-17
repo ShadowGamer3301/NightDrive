@@ -14,9 +14,10 @@ namespace Ngine {
 	};
 
 	struct NAPI Object {
-		std::vector<float> verticies;
-		std::vector<float> color;
-		std::vector<float> uvs;
+		std::vector<glm::vec3> verticies;
+		std::vector<glm::vec3> color;
+		std::vector<glm::vec3> normals;
+		std::vector<glm::vec2> uvs;
 		GLuint program, texture;
 		GLuint VAO, VBO, CBO, UBO;
 		Matrix mat;
@@ -30,6 +31,7 @@ namespace Ngine {
 		static GLuint CompileShader(const char* vpath, const char* fpath);
 		static GLuint LoadBMP(const char* ipath);
 		static GLuint LoadDDS(const char* ipath);
+		static void LoadOBJ(const char* opath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals, bool dds);
 	};
 }
 

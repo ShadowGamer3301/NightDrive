@@ -16,6 +16,9 @@
     <Filter Include="Pliki zasobów\Shaders">
       <UniqueIdentifier>{f0c84fa6-2fa8-4e29-bfd3-f84dd5eb8369}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki zasobów\Meshes">
+      <UniqueIdentifier>{ac57afcb-7ccc-4eb4-8e2d-52be04b09e6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,10 +45,18 @@
     <None Include="Shader\TTV.glsl">
       <Filter>Pliki zasobów\Shaders</Filter>
     </None>
+    <None Include="Trunk1.mtl">
+      <Filter>Pliki zasobów\Meshes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="road.bmp">
       <Filter>Pliki zasobów</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Trunk1.obj">
+      <Filter>Pliki zasobów\Meshes</Filter>
+    </Object>
   </ItemGroup>
 </Project>
