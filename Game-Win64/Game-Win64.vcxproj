@@ -94,11 +94,16 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\ColorF.glsl" />
-    <None Include="Shader\ColorV.glsl" />
     <None Include="Game.ini" />
-    <None Include="Shader\DebugF.glsl" />
-    <None Include="Shader\DebugV.glsl" />
+    <None Include="Shader\TCF.glsl" />
+    <None Include="Shader\TCV.glsl" />
+    <None Include="Shader\TDF.glsl" />
+    <None Include="Shader\TDV.glsl" />
+    <None Include="Shader\TTF.glsl" />
+    <None Include="Shader\TTV.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="road.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

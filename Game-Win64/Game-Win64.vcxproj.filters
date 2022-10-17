@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Pliki zasobów\Shaders">
+      <UniqueIdentifier>{f0c84fa6-2fa8-4e29-bfd3-f84dd5eb8369}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,18 +23,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\DebugV.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="Shader\DebugF.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
     <None Include="Game.ini" />
-    <None Include="Shader\ColorF.glsl">
+    <None Include="Shader\TDV.glsl" />
+    <None Include="Shader\TDF.glsl" />
+    <None Include="Shader\TCV.glsl" />
+    <None Include="Shader\TCF.glsl" />
+    <None Include="Shader\TTV.glsl" />
+    <None Include="Shader\TTF.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="road.bmp">
       <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="Shader\ColorV.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
+    </Image>
   </ItemGroup>
 </Project>
