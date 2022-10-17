@@ -94,6 +94,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shader\ColorF.glsl" />
+    <None Include="Shader\ColorV.glsl" />
     <None Include="Game.ini" />
     <None Include="Shader\DebugF.glsl" />
     <None Include="Shader\DebugV.glsl" />

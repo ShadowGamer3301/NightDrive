@@ -15,8 +15,9 @@ namespace Ngine {
 
 	struct NAPI Object {
 		std::vector<float> verticies;
+		std::vector<float> color;
 		GLuint program;
-		GLuint VAO, VBO;
+		GLuint VAO, VBO, CBO;
 		Matrix mat;
 
 		void Draw();

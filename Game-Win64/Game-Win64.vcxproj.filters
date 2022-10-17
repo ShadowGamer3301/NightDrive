@@ -27,5 +27,11 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="Game.ini" />
+    <None Include="Shader\ColorF.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="Shader\ColorV.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
 </Project>

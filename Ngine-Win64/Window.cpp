@@ -33,6 +33,9 @@ Ngine::Window::Window(int width, int height, const char* title)
 
 	glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
 
+	glEnable(GL_DEPTH_TEST);
+
+	glDepthFunc(GL_LESS);
 }
 
 Ngine::Window::~Window()
@@ -43,7 +46,7 @@ Ngine::Window::~Window()
 
 void Ngine::Window::StartRender()
 {
-	glClear(GL_COLOR_BUFFER_BIT); //Clear back buffer data
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear back buffer data
 }
 
 void Ngine::Window::EndRender()
