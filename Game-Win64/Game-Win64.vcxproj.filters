@@ -24,12 +24,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Game.ini" />
-    <None Include="Shader\TDV.glsl" />
-    <None Include="Shader\TDF.glsl" />
-    <None Include="Shader\TCV.glsl" />
-    <None Include="Shader\TCF.glsl" />
-    <None Include="Shader\TTV.glsl" />
-    <None Include="Shader\TTF.glsl" />
+    <None Include="Shader\TCF.glsl">
+      <Filter>Pliki zasobów\Shaders</Filter>
+    </None>
+    <None Include="Shader\TCV.glsl">
+      <Filter>Pliki zasobów\Shaders</Filter>
+    </None>
+    <None Include="Shader\TDF.glsl">
+      <Filter>Pliki zasobów\Shaders</Filter>
+    </None>
+    <None Include="Shader\TDV.glsl">
+      <Filter>Pliki zasobów\Shaders</Filter>
+    </None>
+    <None Include="Shader\TTF.glsl">
+      <Filter>Pliki zasobów\Shaders</Filter>
+    </None>
+    <None Include="Shader\TTV.glsl">
+      <Filter>Pliki zasobów\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="road.bmp">

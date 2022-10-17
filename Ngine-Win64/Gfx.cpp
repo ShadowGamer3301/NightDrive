@@ -335,6 +335,12 @@ void Ngine::Object::Draw()
 	glDisableVertexAttribArray(0);	
 
 	//Delete buffers
+	if(!uvs.empty())
+		glDeleteBuffers(1, &UBO);
+
+	if(!color.empty())
+		glDeleteBuffers(1, &CBO);
+
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
 }
