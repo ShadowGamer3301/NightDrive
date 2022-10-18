@@ -1,6 +1,7 @@
 #pragma once
 #include "Window.h"
 #include <glm/mat4x4.hpp>
+#include <tiny_obj_loader.h>
 #include <vector>
 
 namespace Ngine {
@@ -31,7 +32,8 @@ namespace Ngine {
 		static GLuint CompileShader(const char* vpath, const char* fpath);
 		static GLuint LoadBMP(const char* ipath);
 		static GLuint LoadDDS(const char* ipath);
-		static void LoadOBJ(const char* opath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals, bool dds);
+		static void LoadOBJLegacy(const char* opath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals, bool dds);
+		static void LoadOBJ(const char* opath, const char* mpath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals);
 	};
 }
 

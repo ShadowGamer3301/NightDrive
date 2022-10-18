@@ -12,7 +12,7 @@ int main(void) try {
 	
 
 	obj.program = Ngine::Gfx::CompileShader("Shader/TDV.glsl", "Shader/TDF.glsl");
-	Ngine::Gfx::LoadOBJ("Trunk1.obj", obj.verticies, obj.uvs, obj.normals, false);
+	Ngine::Gfx::LoadOBJ("Trunk1.obj", "./", obj.verticies, obj.uvs, obj.normals);
 	obj.InitMatrix();
 
 	while (!wnd.ShouldClose())

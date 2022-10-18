@@ -282,7 +282,7 @@ GLuint Ngine::Gfx::LoadDDS(const char* ipath)
 	return textureID;
 }
 
-void Ngine::Gfx::LoadOBJ(const char* opath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals, bool dds)
+void Ngine::Gfx::LoadOBJLegacy(const char* opath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals, bool dds)
 {
 	spdlog::info("Loading mesh in OBJ format: {}", opath);
 
@@ -376,6 +376,83 @@ void Ngine::Gfx::LoadOBJ(const char* opath, std::vector<glm::vec3>& verticies, s
 
 	}
 	fclose(file);
+}
+
+void Ngine::Gfx::LoadOBJ(const char* opath, const char* mpath, std::vector<glm::vec3>& verticies, std::vector<glm::vec2>& uvs, std::vector<glm::vec3>& normals)
+{
+	spdlog::info("Loading mesh in OBJ format: {}", opath);
+	spdlog::info("Loading mesh material in : {}", mpath);
+
+	tinyobj::ObjReaderConfig reader_config;
+	reader_config.mtl_search_path = mpath;
+	tinyobj::ObjReader reader;
+
+	if (!reader.ParseFromFile(opath, reader_config)) {
+		if (!reader.Error().empty())
+		{
+			spdlog::error("Cannot load OBJ file: {}", reader.Error());
+		}
+		throw Ngine::Exception(__LINE__, __FILE__, "Could not parse mesh file");
+	}
+
+	if (!reader.Warning().empty()) {
+		spdlog::warn("TinyObjReader: {}", reader.Warning());
+	}
+
+	auto& attrib = reader.GetAttrib();
+	auto& shapes = reader.GetShapes();
+	auto& materials = reader.GetMaterials();
+
+	std::vector<glm::vec3> vv;
+	std::vector<glm::vec2> uv;
+	std::vector<glm::vec3> nv;
+
+	// Loop over shapes
+	for (size_t s = 0; s < shapes.size(); s++) {
+		// Loop over faces(polygon)
+		size_t index_offset = 0;
+		for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+			size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
+			// Loop over vertices in the face.
+			for (size_t v = 0; v < fv; v++) {
+				// access to vertex
+				tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+				glm::vec3 vert;
+				vert.x = attrib.vertices[3 * size_t(idx.vertex_index) + 0];
+				vert.y = attrib.vertices[3 * size_t(idx.vertex_index) + 1];
+				vert.z = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
+				vv.push_back(vert);
+
+				// Check if `normal_index` is zero or positive. negative = no normal data
+				if (idx.normal_index >= 0) {
+					glm::vec3 norm;
+					norm.x = attrib.normals[3 * size_t(idx.normal_index) + 0];
+					norm.y = attrib.normals[3 * size_t(idx.normal_index) + 1];
+					norm.z = attrib.normals[3 * size_t(idx.normal_index) + 2];
+				}
+
+				// Check if `texcoord_index` is zero or positive. negative = no texcoord data
+				if (idx.texcoord_index >= 0) {
+					glm::vec2 uv;
+					uv.x = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
+					uv.y = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+				}
+
+				// Optional: vertex colors
+				// tinyobj::real_t red   = attrib.colors[3*size_t(idx.vertex_index)+0];
+				// tinyobj::real_t green = attrib.colors[3*size_t(idx.vertex_index)+1];
+				// tinyobj::real_t blue  = attrib.colors[3*size_t(idx.vertex_index)+2];
+			}
+			index_offset += fv;
+
+			// per-face material
+			shapes[s].mesh.material_ids[f];
+		}
+	}
+
+	verticies = vv;
+	normals = nv;
+	uvs = uv;
 }
 
 void Ngine::Object::Draw()
