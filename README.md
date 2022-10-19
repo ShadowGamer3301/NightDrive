@@ -7,3 +7,4 @@ Night drive is free, open source racing game for windows and linux
 - glew by nigels-com - https://github.com/nigels-com/glew
 - glfw by glfw - https://github.com/glfw/glfw
 - glm by groovounet - https://github.com/Groovounet/glm
+- tinyobjloader by tinyobjloader - https://github.com/tinyobjloader/tinyobjloader
