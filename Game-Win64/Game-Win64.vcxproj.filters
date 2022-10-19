@@ -48,6 +48,9 @@
     <None Include="Trunk1.mtl">
       <Filter>Pliki zasobów\Meshes</Filter>
     </None>
+    <None Include="Test.mtl">
+      <Filter>Pliki zasobów\Meshes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="road.bmp">
@@ -56,6 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Object Include="Trunk1.obj">
+      <Filter>Pliki zasobów\Meshes</Filter>
+    </Object>
+    <Object Include="Test.obj">
       <Filter>Pliki zasobów\Meshes</Filter>
     </Object>
   </ItemGroup>

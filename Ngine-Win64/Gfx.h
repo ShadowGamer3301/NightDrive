@@ -1,6 +1,8 @@
 #pragma once
 #include "Window.h"
 #include <glm/mat4x4.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <tiny_obj_loader.h>
 #include <vector>
 
@@ -25,6 +27,7 @@ namespace Ngine {
 
 		void Draw();
 		void InitMatrix();
+		void Tanslate(glm::vec3 v) { mat.MVP = glm::translate(mat.MVP, v); };
 	};
 
 	class NAPI Gfx {

@@ -11,13 +11,15 @@ int main(void) try {
 	Ngine::Object obj;
 	
 
-	obj.program = Ngine::Gfx::CompileShader("Shader/TDV.glsl", "Shader/TDF.glsl");
-	Ngine::Gfx::LoadOBJ("Trunk1.obj", "./", obj.verticies, obj.uvs, obj.normals);
+	obj.program = Ngine::Gfx::CompileShader("Shader/TTV.glsl", "Shader/TTF.glsl");
+	Ngine::Gfx::LoadOBJ("Test.obj", ".", obj.verticies, obj.uvs, obj.normals);
+	obj.texture = Ngine::Gfx::LoadBMP("road.bmp");
 	obj.InitMatrix();
 
 	while (!wnd.ShouldClose())
 	{
 		wnd.StartRender();
+		obj.Tanslate(glm::vec3(0.0f, -0.001f, 0.0f));
 		obj.Draw();
 		wnd.EndRender();
 	}

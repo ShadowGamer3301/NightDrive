@@ -101,12 +101,17 @@
     <None Include="Shader\TDV.glsl" />
     <None Include="Shader\TTF.glsl" />
     <None Include="Shader\TTV.glsl" />
+    <None Include="Test.mtl" />
     <None Include="Trunk1.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="road.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Object Include="Test.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
     <Object Include="Trunk1.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

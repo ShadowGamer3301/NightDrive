@@ -404,7 +404,7 @@ void Ngine::Gfx::LoadOBJ(const char* opath, const char* mpath, std::vector<glm::
 	auto& materials = reader.GetMaterials();
 
 	std::vector<glm::vec3> vv;
-	std::vector<glm::vec2> uv;
+	std::vector<glm::vec2> uvv;
 	std::vector<glm::vec3> nv;
 
 	// Loop over shapes
@@ -429,6 +429,7 @@ void Ngine::Gfx::LoadOBJ(const char* opath, const char* mpath, std::vector<glm::
 					norm.x = attrib.normals[3 * size_t(idx.normal_index) + 0];
 					norm.y = attrib.normals[3 * size_t(idx.normal_index) + 1];
 					norm.z = attrib.normals[3 * size_t(idx.normal_index) + 2];
+					nv.push_back(norm);
 				}
 
 				// Check if `texcoord_index` is zero or positive. negative = no texcoord data
@@ -436,6 +437,7 @@ void Ngine::Gfx::LoadOBJ(const char* opath, const char* mpath, std::vector<glm::
 					glm::vec2 uv;
 					uv.x = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
 					uv.y = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+					uvv.push_back(uv);
 				}
 
 				// Optional: vertex colors
@@ -452,7 +454,7 @@ void Ngine::Gfx::LoadOBJ(const char* opath, const char* mpath, std::vector<glm::
 
 	verticies = vv;
 	normals = nv;
-	uvs = uv;
+	uvs = uvv;
 }
 
 void Ngine::Object::Draw()
@@ -532,7 +534,7 @@ void Ngine::Matrix::Initialize(GLuint program)
 		throw Ngine::Exception(__LINE__, __FILE__, "Could not read configuration file");
 
 	//45° Field of View, dynamic ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)std::stoi(ini["Game"]["Width"]) / (float)std::stoi(ini["Game"]["Height"]), 0.1f, 100.0f);
+	glm::mat4 Projection = glm::perspective(glm::radians(90.0f), (float)std::stoi(ini["Game"]["Width"]) / (float)std::stoi(ini["Game"]["Height"]), 0.1f, 100.0f);
 
 	//Camera matrix
 	glm::mat4 View = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
